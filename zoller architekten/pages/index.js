@@ -42,9 +42,6 @@ export default function Home({ navData, landingParagraph }) {
           <p className="landing-paragraph">
             {landingParagraph}
           </p>
-          <div className="landing-actions">
-            <a href="/projects/hochbau/sample-project" className="landing-btn">Explore Projects</a>
-          </div>
         </div>
       </main>
       <style jsx>{`
