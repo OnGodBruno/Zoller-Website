@@ -3,8 +3,12 @@ import '../styles/globals.css';
 import Layout from '../components/Layout/Layout';
 
 function MyApp({ Component, pageProps }) {
-  // If categories exist in pageProps, great; otherwise default to []
-  const { categories = [] } = pageProps;
+  // Transform navData to categories format expected by Layout
+  const { navData = [] } = pageProps;
+  const categories = navData.map(({ category, projects }) => ({
+    name: category,
+    projects: projects || []
+  }));
 
   return (
     <Layout categories={categories}>
