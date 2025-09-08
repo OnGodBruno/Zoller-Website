@@ -45,157 +45,307 @@ export default function Home({ navData, landingParagraph }) {
         </div>
       </main>
       <style jsx>{`
+        :global(body) {
+          margin: 0;
+          padding: 0;
+          background: #ffffff;
+          color: #000000;
+          line-height: 1.4;
+          font-family: "Helvetica Neue", Arial, sans-serif;
+          font-weight: 300;
+        }
+
         .navbar {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 0 40px;
-          height: 60px;
-          border-top: 1px solid black;
-          border-bottom: 1px solid black;
-          background-color: transparent;
-          gap: 40px;
+          padding: 24px 48px;
+          height: auto;
+          border-bottom: 1px solid #000000;
+          background-color: #ffffff;
+          position: sticky;
+          top: 0;
+          z-index: 1000;
         }
+
         .nav-links {
           position: relative;
         }
+
         .nav-list {
           display: flex;
-          gap: 50px;
+          gap: 32px;
           list-style: none;
           margin: 0;
           padding: 0;
         }
+
         .nav-item {
           position: relative;
           font-family: "Helvetica Neue", Arial, sans-serif;
           text-transform: uppercase;
+          font-size: 11px;
+          letter-spacing: 1px;
+          font-weight: 400;
         }
+
+        /* Add invisible bridge to prevent dropdown from disappearing */
+        .nav-item::after {
+          content: '';
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          height: 16px;
+          background: transparent;
+          z-index: 1001;
+        }
+
         .nav-category {
           cursor: pointer;
-          font-weight: 600;
+          padding: 8px 0;
+          border-bottom: 1px solid transparent;
+          transition: border-color 0.2s ease;
         }
+
+        .nav-category:hover {
+          border-bottom-color: #000000;
+        }
+
         .submenu {
           position: absolute;
           top: 100%;
           left: 50%;
-          transform: translateX(-50%) translateY(10px);
+          transform: translateX(-50%) translateY(16px);
           display: none;
-          background: rgba(255, 255, 255, 0.85);
-          backdrop-filter: blur(8px);
+          background: #ffffff;
           list-style: none;
           margin: 0;
-          padding: 10px 0;
-          border: 1px solid #e0e0e0;
-          min-width: 180px;
+          padding: 24px 0;
+          border: none;
+          min-width: 280px;
+          max-width: 400px;
+          max-height: 60vh;
+          overflow-y: auto;
           z-index: 1002;
           opacity: 0;
           pointer-events: none;
-          transition: opacity 0.2s cubic-bezier(.4,0,.2,1), transform 0.2s cubic-bezier(.4,0,.2,1);
-          max-height: 60vh;
-          overflow-y: auto;
-          max-width: 90vw;
-          box-sizing: border-box;
+          transition: opacity 0.4s ease, transform 0.4s ease;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
         }
-        .nav-item:hover .submenu,
-        .nav-item:focus-within .submenu {
+
+        /* Custom scrollbar styling */
+        .submenu::-webkit-scrollbar {
+          width: 3px;
+        }
+
+        .submenu::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        .submenu::-webkit-scrollbar-thumb {
+          background: #000000;
+          border-radius: 0;
+        }
+
+        .submenu::-webkit-scrollbar-thumb:hover {
+          background: #333333;
+        }
+
+        /* Add subtle top border accent */
+        .submenu::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 24px;
+          right: 24px;
+          height: 2px;
+          background: #000000;
+        }
+
+        .nav-item:hover .submenu {
           display: block;
           opacity: 1;
           pointer-events: auto;
-          transform: translateX(-50%) translateY(0);
+          transform: translateX(-50%) translateY(8px);
         }
+
         .submenu li {
           margin: 0;
           padding: 0;
+          position: relative;
         }
+
+        .submenu li:not(:last-child)::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 24px;
+          right: 24px;
+          height: 1px;
+          background: #f0f0f0;
+        }
+
         .submenu-link {
           display: block;
-          padding: 10px 22px;
+          padding: 16px 24px;
           text-decoration: none;
-          color: #222;
-          font-size: 1rem;
+          color: #666666;
+          font-size: 11px;
           font-family: 'Helvetica Neue', Arial, sans-serif;
-          transition: background 0.18s, color 0.18s;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          transition: all 0.3s ease;
+          position: relative;
+          font-weight: 300;
         }
-        .submenu-link:hover, .submenu-link:focus {
-          background: #000;
-          color: #f2f2f2;
+
+        .submenu-link::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 0;
+          height: 1px;
+          background: #000000;
+          transition: width 0.3s ease;
         }
+
+        .submenu-link:hover {
+          color: #000000;
+          padding-left: 32px;
+          font-weight: 400;
+        }
+
+        .submenu-link:hover::before {
+          width: 16px;
+        }
+
         .landing-main {
-          min-height: 100vh;
+          min-height: calc(100vh - 80px);
+          display: grid;
+          grid-template-columns: 1fr 2fr;
+          gap: 80px;
+          padding: 120px 48px 80px;
+          max-width: 1400px;
+          margin: 0 auto;
+          align-items: start;
+        }
+
+        .landing-hero {
           display: flex;
           flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          background: linear-gradient(120deg, #f2f2f2 0%, #e0e0e0 100%);
+          gap: 32px;
         }
-        .landing-hero {
-          text-align: center;
-          margin-bottom: 2.5rem;
-        }
+
         .landing-title {
-          font-size: 3rem;
+          font-size: 32px;
           font-family: 'Helvetica Neue', Arial, sans-serif;
-          font-weight: bold;
-          letter-spacing: 0.04em;
-          margin-bottom: 0.5rem;
+          font-weight: 200;
+          letter-spacing: 3px;
+          line-height: 1.1;
+          margin: 0;
+          text-transform: uppercase;
         }
-        .landing-subtitle {
-          font-size: 1.3rem;
-          color: #444;
-          font-family: 'Georgia', serif;
-        }
+
         .landing-description {
-          text-align: left;
-          margin-top: 2rem;
-          max-width: 800px;
-          margin-left: auto;
-          margin-right: auto;
-          padding: 1.5rem;
-          border: 1px solid #ddd;
-          border-radius: 8px;
-          background-color: #f9f9f9;
-          white-space: pre-wrap; /* Preserve line breaks */
+          background: #ffffff;
+          border: 1px solid #e0e0e0;
+          padding: 48px;
         }
+
         .landing-paragraph {
-          font-size: 1.5rem;
-          color: #555;
-          margin-bottom: 1.5rem;
-          font-family: 'Georgia', serif;
-          line-height: 1.8;
+          font-size: 14px;
+          line-height: 1.7;
+          margin: 0;
+          font-weight: 300;
+          white-space: pre-line;
         }
-        .landing-actions {
-          display: flex;
-          gap: 1.5rem;
-          justify-content: center;
+
+        @media (max-width: 1024px) {
+          .landing-main {
+            grid-template-columns: 1fr;
+            gap: 48px;
+            padding: 80px 24px 48px;
+          }
+          
+          .navbar {
+            padding: 16px 24px;
+          }
+          
+          .nav-list {
+            gap: 16px;
+          }
+
+          .submenu {
+            min-width: 250px;
+            max-width: 300px;
+            max-height: 50vh;
+          }
         }
-        .landing-btn {
-          background: #222;
-          color: #fff;
-          padding: 0.9rem 2.2rem;
-          border-radius: 0;
-          font-size: 1.1rem;
-          text-decoration: none;
-          font-family: 'Helvetica Neue', Arial, sans-serif;
-          font-weight: 600;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-          transition: background 0.18s, color 0.18s, box-shadow 0.18s;
-        }
-        .landing-btn:hover, .landing-btn:focus {
-          background: #000;
-          color: #fff;
-          box-shadow: 0 4px 18px rgba(0,0,0,0.13);
-        }
-        @media (max-width: 600px) {
+
+        @media (max-width: 768px) {
+          .navbar {
+            flex-direction: column;
+            gap: 16px;
+            padding: 16px;
+          }
+          
+          .nav-list {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+          }
+
+          .submenu {
+            left: 50%;
+            transform: translateX(-50%) translateY(16px);
+            min-width: 220px;
+            max-width: 280px;
+            max-height: 40vh;
+            padding: 16px 0;
+          }
+
+          .submenu::before {
+            left: 16px;
+            right: 16px;
+          }
+
+          .submenu li:not(:last-child)::after {
+            left: 16px;
+            right: 16px;
+          }
+
+          .submenu-link {
+            padding: 12px 16px;
+            font-size: 10px;
+          }
+
+          .submenu-link:hover {
+            padding-left: 24px;
+          }
+
+          .nav-item:hover .submenu {
+            transform: translateX(-50%) translateY(8px);
+          }
+          
+          .landing-main {
+            padding: 48px 16px 32px;
+            gap: 32px;
+          }
+          
           .landing-title {
-            font-size: 2rem;
+            font-size: 24px;
+            letter-spacing: 2px;
           }
-          .landing-subtitle {
-            font-size: 1rem;
+          
+          .landing-description {
+            padding: 32px 24px;
           }
-          .landing-btn {
-            font-size: 1rem;
-            padding: 0.7rem 1.5rem;
+          
+          .landing-paragraph {
+            font-size: 13px;
           }
         }
       `}</style>
@@ -227,7 +377,36 @@ export async function getStaticProps() {
   }
 
   if (fs.existsSync(paragraphFilePath)) {
-    landingParagraph = fs.readFileSync(paragraphFilePath, 'utf-8');
+    // Read as buffer first to handle encoding properly
+    let content = fs.readFileSync(paragraphFilePath);
+    
+    // Remove UTF-8 BOM if present (EF BB BF)
+    if (content.length >= 3 && content[0] === 0xef && content[1] === 0xbb && content[2] === 0xbf) {
+      content = content.slice(3);
+    }
+    // Remove UTF-16 LE BOM if present (FF FE)
+    else if (content.length >= 2 && content[0] === 0xff && content[1] === 0xfe) {
+      content = content.slice(2);
+      landingParagraph = content.toString('utf16le').trim().replace(/\0/g, '');
+    }
+    // Remove UTF-16 BE BOM if present (FE FF)
+    else if (content.length >= 2 && content[0] === 0xfe && content[1] === 0xff) {
+      content = content.slice(2);
+      landingParagraph = content.toString('utf16le').trim().replace(/\0/g, '');
+    }
+    
+    if (!landingParagraph) {
+      // Try to decode as UTF-8 and clean up any strange characters
+      let text = content.toString('utf8').trim();
+      
+      // Remove the diamond question mark characters and fix spacing
+      text = text.replace(/^\uFFFD+/, ''); // Remove replacement characters at the start
+      text = text.replace(/\uFFFD/g, ''); // Remove all replacement characters
+      text = text.replace(/^[��\u00EF\u00BB\u00BF]+/, ''); // Remove visible BOM chars
+      text = text.replace(/\s+/g, ' '); // Normalize spacing
+      
+      landingParagraph = text.trim();
+    }
   }
 
   console.log('Landing Paragraph:', landingParagraph);
