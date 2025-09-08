@@ -16,13 +16,15 @@ export default function Layout({ categories = [], children }) {
         <ul className={styles.navList}>
           {categories.map(({ name, projects }) => (
             <li key={name} className={styles.navItem}>
-              <span className={styles.navLink}>{name}</span>
-              {projects.length > 0 && (
+              <Link href={`/projects/${name}`} className={styles.navLink}>
+                {formatCategoryTitle(name)}
+              </Link>
+              {projects && projects.length > 0 && (
                 <ul className={styles.subMenu}>
                   {projects.map(projectSlug => (
                     <li key={projectSlug} className={styles.subMenuItem}>
                       <Link
-                        href={`/projects/${projectSlug}`}
+                        href={`/projects/${name}/${projectSlug}`}
                         className={styles.subMenuLink}
                       >
                         {formatProjectTitle(projectSlug)}
@@ -40,6 +42,13 @@ export default function Layout({ categories = [], children }) {
       <main className={styles.mainContent}>{children}</main>
     </div>
   );
+}
+
+/** Helper to format category names */
+function formatCategoryTitle(category) {
+  return category
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, char => char.toUpperCase());
 }
 
 /** Helper to format 'sample-project' => 'Sample Project' */
