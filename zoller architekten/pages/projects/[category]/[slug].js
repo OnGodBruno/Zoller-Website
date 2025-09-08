@@ -1,11 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useState } from 'react';
 import Lightbox, { useLightboxState } from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 
 export default function ProjectPage({ project, navData }) {
+  // State to control the Lightbox modal
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+
   if (!project) {
     return <div>No project data found.</div>;
   }
@@ -18,9 +23,15 @@ export default function ProjectPage({ project, navData }) {
   // Transform gallery images into slides for the Lightbox
   const gallerySlides = galleryImages.map((img) => ({ src: img }));
 
-  // State to control the Lightbox modal
-  const [photoIndex, setPhotoIndex] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
+  // Custom slideFooter component that follows hook rules
+  const SlideFooter = () => {
+    const { currentIndex } = useLightboxState();
+    return (
+      <div className="custom-lightbox-counter">
+        {currentIndex + 1} / {gallerySlides.length}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -32,7 +43,7 @@ export default function ProjectPage({ project, navData }) {
       {/* NAV BAR with top and bottom lines only */}
       <header className="navbar">
         <div className="logo">
-          <a href="/" className="logo-link">Zoller Architekten</a>
+          <Link href="/" className="logo-link">Zoller Architekten</Link>
         </div>
         <nav className="nav-links">
           <ul className="nav-list">
@@ -146,14 +157,7 @@ export default function ProjectPage({ project, navData }) {
           index={photoIndex}
           onIndexChange={setPhotoIndex}
           render={{
-            slideFooter: () => {
-              const { currentIndex } = useLightboxState();
-              return (
-                <div className="custom-lightbox-counter">
-                  {currentIndex + 1} / {gallerySlides.length}
-                </div>
-              );
-            }
+            slideFooter: SlideFooter
           }}
         />
       )}

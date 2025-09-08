@@ -3,7 +3,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import fs from 'fs';
 import path from 'path';
-import { useState } from 'react';
 
 export default function CategoryOverview({ category, projects, navData }) {
   return (
