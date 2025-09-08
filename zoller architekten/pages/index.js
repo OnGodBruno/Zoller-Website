@@ -52,7 +52,7 @@ export default function Home({ navData, landingParagraph }) {
           </ul>
         </nav>
 
-        /* Mobile Navigation */
+        {/* Mobile Navigation */}
         <nav className="mobile-nav">
           <div className="mobile-nav-header">
             <span className="mobile-logo">ZOLLER ARCHITEKTEN</span>

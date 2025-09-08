@@ -3,11 +3,11 @@ import path from 'path';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
-import Lightbox, { useLightboxState } from 'yet-another-react-lightbox';
+import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 
 export default function ProjectPage({ project, navData }) {
-  // State to control the Lightbox modal
+  // State to control the Lightbox modal - must be declared before any early returns
   const [photoIndex, setPhotoIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -22,16 +22,6 @@ export default function ProjectPage({ project, navData }) {
   const galleryImages = [...images, ...plans];
   // Transform gallery images into slides for the Lightbox
   const gallerySlides = galleryImages.map((img) => ({ src: img }));
-
-  // Custom slideFooter component that follows hook rules
-  const SlideFooter = () => {
-    const { currentIndex } = useLightboxState();
-    return (
-      <div className="custom-lightbox-counter">
-        {currentIndex + 1} / {gallerySlides.length}
-      </div>
-    );
-  };
 
   return (
     <>
@@ -157,7 +147,13 @@ export default function ProjectPage({ project, navData }) {
           index={photoIndex}
           onIndexChange={setPhotoIndex}
           render={{
-            slideFooter: SlideFooter
+            slideFooter: ({ index }) => {
+              return (
+                <div className="custom-lightbox-counter">
+                  {index + 1} / {gallerySlides.length}
+                </div>
+              );
+            }
           }}
         />
       )}
