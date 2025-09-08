@@ -2,8 +2,26 @@
 import Head from 'next/head';
 import fs from 'fs';
 import path from 'path';
+import { useState } from 'react';
 
 export default function Home({ navData, landingParagraph }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openCategory, setOpenCategory] = useState(null);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setOpenCategory(null); // Close any open category when toggling main menu
+  };
+
+  const toggleCategory = (category) => {
+    setOpenCategory(openCategory === category ? null : category);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    setOpenCategory(null);
+  };
+
   return (
     <>
       <Head>
@@ -11,7 +29,8 @@ export default function Home({ navData, landingParagraph }) {
         <meta name="description" content="Zoller Architekten Portfolio" />
       </Head>
       <header className="navbar">
-        <nav className="nav-links">
+        {/* Desktop Navigation */}
+        <nav className="nav-links desktop-nav">
           <ul className="nav-list">
             {navData.map(({ category, projects }) => (
               <li key={category} className="nav-item">
@@ -31,6 +50,54 @@ export default function Home({ navData, landingParagraph }) {
               </li>
             ))}
           </ul>
+        </nav>
+
+        /* Mobile Navigation */
+        <nav className="mobile-nav">
+          <div className="mobile-nav-header">
+            <span className="mobile-logo">ZOLLER ARCHITEKTEN</span>
+            <button 
+              className="mobile-menu-toggle"
+              onClick={toggleMobileMenu}
+              aria-label="Toggle navigation menu"
+            >
+              <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
+              <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
+              <span className={`hamburger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
+            </button>
+          </div>
+          
+          <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
+            <div className="mobile-menu-backdrop" onClick={closeMobileMenu}></div>
+            <div className="mobile-menu-content">
+              <ul className="mobile-nav-list">
+                {navData.map(({ category, projects }) => (
+                  <li key={category} className="mobile-nav-item">
+                    <button 
+                      className="mobile-nav-category"
+                      onClick={() => toggleCategory(category)}
+                    >
+                      {category}
+                      <span className={`category-arrow ${openCategory === category ? 'open' : ''}`}>→</span>
+                    </button>
+                    <ul className={`mobile-submenu ${openCategory === category ? 'open' : ''}`}>
+                      {projects.map((pSlug) => (
+                        <li key={pSlug}>
+                          <a
+                            href={`/projects/${category}/${pSlug}`}
+                            className="mobile-submenu-link"
+                            onClick={closeMobileMenu}
+                          >
+                            {pSlug.replace(/-/g, ' ')}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </nav>
       </header>
       <main className="landing-main">
@@ -65,6 +132,15 @@ export default function Home({ navData, landingParagraph }) {
           position: sticky;
           top: 0;
           z-index: 1000;
+        }
+
+        /* Desktop Navigation */
+        .desktop-nav {
+          display: block;
+        }
+
+        .mobile-nav {
+          display: none;
         }
 
         .nav-links {
@@ -221,6 +297,194 @@ export default function Home({ navData, landingParagraph }) {
           width: 16px;
         }
 
+        /* Mobile Navigation Styles */
+        .mobile-nav {
+          width: 100%;
+        }
+
+        .mobile-nav-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+        }
+
+        .mobile-logo {
+          font-family: "Helvetica Neue", Arial, sans-serif;
+          font-size: 14px;
+          font-weight: 200;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          color: #000000;
+        }
+
+        .mobile-menu-toggle {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          width: 24px;
+          height: 24px;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          z-index: 1003;
+        }
+
+        .hamburger-line {
+          width: 24px;
+          height: 2px;
+          background: #000000;
+          transition: all 0.3s ease;
+          transform-origin: center;
+        }
+
+        .hamburger-line.active:nth-child(1) {
+          transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger-line.active:nth-child(2) {
+          opacity: 0;
+        }
+
+        .hamburger-line.active:nth-child(3) {
+          transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-menu {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100vh;
+          transform: translateX(-100%);
+          transition: transform 0.3s ease;
+          z-index: 1002;
+          overflow: hidden;
+        }
+
+        .mobile-menu.open {
+          transform: translateX(0);
+        }
+
+        .mobile-menu-backdrop {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1;
+        }
+
+        .mobile-menu-content {
+          position: relative;
+          width: 80%;
+          max-width: 320px;
+          height: 100%;
+          background: #ffffff;
+          box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+          overflow-y: auto;
+          padding-top: 80px;
+          z-index: 2;
+        }
+
+        /* Backdrop for mobile menu */
+        .mobile-menu::before {
+          content: '';
+          position: fixed;
+          top: 0;
+          left: 100%;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          pointer-events: none;
+        }
+
+        .mobile-menu.open::before {
+          opacity: 1;
+          pointer-events: auto;
+        }
+
+        .mobile-nav-list {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .mobile-nav-item {
+          border-bottom: 1px solid #f0f0f0;
+        }
+
+        .mobile-nav-category {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          padding: 20px 24px;
+          background: none;
+          border: none;
+          font-family: "Helvetica Neue", Arial, sans-serif;
+          text-transform: uppercase;
+          font-size: 12px;
+          letter-spacing: 1px;
+          font-weight: 400;
+          color: #000000;
+          cursor: pointer;
+          text-align: left;
+        }
+
+        .mobile-nav-category:hover {
+          background: #f8f8f8;
+        }
+
+        .category-arrow {
+          font-size: 16px;
+          transition: transform 0.3s ease;
+          font-weight: 300;
+        }
+
+        .category-arrow.open {
+          transform: rotate(90deg);
+        }
+
+        .mobile-submenu {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease;
+          background: #f8f8f8;
+        }
+
+        .mobile-submenu.open {
+          max-height: 500px;
+        }
+
+        .mobile-submenu-link {
+          display: block;
+          padding: 16px 40px;
+          text-decoration: none;
+          color: #666666;
+          font-size: 11px;
+          font-family: 'Helvetica Neue', Arial, sans-serif;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          font-weight: 300;
+          border-bottom: 1px solid #e8e8e8;
+          transition: all 0.2s ease;
+        }
+
+        .mobile-submenu-link:hover {
+          color: #000000;
+          background: #efefef;
+          padding-left: 48px;
+        }
+
+        .mobile-submenu li:last-child .mobile-submenu-link {
+          border-bottom: none;
+        }
+
         .landing-main {
           min-height: calc(100vh - 80px);
           display: grid;
@@ -284,50 +548,28 @@ export default function Home({ navData, landingParagraph }) {
           }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
+          /* Hide desktop navigation and show mobile navigation */
+          .desktop-nav {
+            display: none !important;
+          }
+
+          .mobile-nav {
+            display: block !important;
+          }
+
           .navbar {
-            flex-direction: column;
-            gap: 16px;
-            padding: 16px;
-          }
-          
-          .nav-list {
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
+            padding: 16px 24px;
           }
 
-          .submenu {
-            left: 50%;
-            transform: translateX(-50%) translateY(16px);
-            min-width: 220px;
-            max-width: 280px;
-            max-height: 40vh;
-            padding: 16px 0;
+          .mobile-nav {
+            width: 100%;
+            max-width: none;
           }
+        }
 
-          .submenu::before {
-            left: 16px;
-            right: 16px;
-          }
-
-          .submenu li:not(:last-child)::after {
-            left: 16px;
-            right: 16px;
-          }
-
-          .submenu-link {
-            padding: 12px 16px;
-            font-size: 10px;
-          }
-
-          .submenu-link:hover {
-            padding-left: 24px;
-          }
-
-          .nav-item:hover .submenu {
-            transform: translateX(-50%) translateY(8px);
-          }
+        @media (max-width: 768px) {
           
           .landing-main {
             padding: 48px 16px 32px;
@@ -345,6 +587,55 @@ export default function Home({ navData, landingParagraph }) {
           
           .landing-paragraph {
             font-size: 13px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .navbar {
+            padding: 12px 16px;
+          }
+
+          .mobile-logo {
+            font-size: 12px;
+            letter-spacing: 1.5px;
+          }
+
+          .mobile-menu-content {
+            width: 85%;
+            max-width: 280px;
+          }
+
+          .mobile-nav-category {
+            padding: 18px 16px;
+            font-size: 11px;
+          }
+
+          .mobile-submenu-link {
+            padding: 14px 32px;
+            font-size: 10px;
+          }
+
+          .mobile-submenu-link:hover {
+            padding-left: 40px;
+          }
+
+          .landing-main {
+            padding: 32px 12px 24px;
+            gap: 24px;
+          }
+
+          .landing-title {
+            font-size: 20px;
+            letter-spacing: 1.5px;
+          }
+
+          .landing-description {
+            padding: 24px 16px;
+          }
+
+          .landing-paragraph {
+            font-size: 12px;
+            line-height: 1.6;
           }
         }
       `}</style>
