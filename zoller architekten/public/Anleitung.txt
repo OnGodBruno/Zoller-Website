@@ -1,0 +1,52 @@
+ANLEITUNG ZUR INHALTSVERWALTUNG DER WEBSITE
+
+Im Ordner "public" (in dem sich auch diese Datei befindet) liegen alle Inhalte, die für Änderungen an der Website benötigt werden.
+
+STARTSEITE
+
+Die Datei "landing-paragraph.txt" bestimmt den Text auf der Startseite.
+
+PROJEKTE
+
+Die Projekte befinden sich im Ordner "projects".
+Sie sind in folgende Kategorien unterteilt:
+
+Hochbau
+
+Privatbau
+
+Verkehr
+
+Wettbewerbe
+
+Wohnen
+
+Jede Kategorie enthält Unterordner.
+Jeder dieser Unterordner entspricht einem einzelnen Projekt.
+
+AUFBAU EINES PROJEKTORDNERS
+
+Ein Projektordner besteht aus folgenden Dateien und Unterordnern:
+
+"images"
+→ Enthält Bilder für die Projektgalerie (.png / .jpg)
+
+"plans"
+→ Enthält Pläne als Bilddateien (.png / .jpg)
+
+"title.txt" (Pflichtdatei)
+→ Titel des Projekts
+
+"description.txt"
+→ Beschreibung / Prosatext des Projekts
+
+"misc.txt"
+→ Weitere Informationen
+
+"location.txt"
+→ Adresse bzw. Standort des Projekts
+
+ÄNDERUNGEN HOCHLADEN
+
+Damit Änderungen auf der Website sichtbar werden, muss die Datei
+"push.bat" ausgeführt werden.
