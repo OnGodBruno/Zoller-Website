@@ -1,4 +1,4 @@
-// pages/index.js
+﻿// pages/index.js
 import Head from 'next/head';
 import fs from 'fs';
 import path from 'path';
@@ -103,6 +103,8 @@ export default function Home({ navData, landingParagraph }) {
       <main className="landing-main">
         <div className="landing-hero">
           <h1 className="landing-title">ZOLLER ARCHITEKTEN</h1>
+	  <h1 className="landing-title">CABANE GBMH</h1>
+	  <h1 className="landing-title">LA CABANE AG</h1>
         </div>
         <div className="landing-description">
           <p className="landing-paragraph">
