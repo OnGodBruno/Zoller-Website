@@ -1,7 +1,6 @@
 @echo off
 
-cd /d //server/files/Homepage/Website/Zoller-Website
-
+cd /d "\\server\files\Homepage\Website\Zoller-Website"
 
 git add .
 
