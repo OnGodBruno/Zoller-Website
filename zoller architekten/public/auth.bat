@@ -1,33 +1,21 @@
 @echo off
-echo Pushing changes to repository...
-echo.
 
-REM Read PAT from external file
-setlocal enabledelayedexpansion
-set "PAT="
-for /f "usebackq delims=" %%a in ("N:\Homepage\Website\auth.txt") do (
-    set "PAT=%%a"
-)
+cd /d //server/files/Homepage/Website/Zoller-Website
 
-set GIT_REPO_URL=https://zoller-bot:%PAT%@github.com/OnGodBruno/Zoller-Website.git
-
-REM Add all changes to staging
 git add .
 
-REM Check if there are any changes to commit
 git diff-index --quiet HEAD --
+
 if errorlevel 1 (
-    REM Commit with timestamp
-    git commit -m "Auto-commit: %date% %time%"
+
+	git commit -m "Auto-commit: %date% %time%"
     
-    REM Push to remote repository
-    git push %GIT_REPO_URL% HEAD:main
+	git push origin master
     
-    echo.
-    echo Changes pushed successfully!
+	echo Changes pushed successfully!
 ) else (
-    echo No changes to commit.
+    
+	echo No changes to commit.
 )
 
-echo.
 pause
