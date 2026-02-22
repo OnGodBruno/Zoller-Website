@@ -16,6 +16,7 @@ if errorlevel 1 (
 ) else (
     
 	echo No changes to commit.
+
 )
 
 pause
